@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>time_calculator</title>
+<style>
+        .author-info {
+            display: inline;
+            margin-right: 10px;
+        }
+		
+        body {
+            font-family: Roboto, sans-serif;
+            /* font-family: Arial, sans-serif;*/
+            font-size: 14px;            /* 設置較小的字體大小 */
+        }
+
+    .tool-container {
+        margin-bottom: 20px;
+    }
+    .tool-container h2 {
+        margin-bottom: 5px;
+    }
+    .input-group {
+        margin-bottom: 10px;
+    }
+    .input-group input[type="number"] {
+        width: 40px; /* 調整只有天數、小時、分鐘和秒數的輸入框大小 */
+    }
+    .input-inline {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .result {
+        white-space: nowrap;
+    }
+    .separator {
+        border-top: 1px solid #ccc;
+        margin: 20px 0;
+    }
+</style>
+</head>
+<body>
+
+<h1>time_calculator</h1>
+    <p class="author-info">Author: Dustin_Chen</p>
+    <p class="author-info">Email: <a href="mailto:Dustin_Chen@compal.com">Dustin_Chen@compal.com</a></p>
+    <p class="author-info">or <a href="mailto:chuhpsdustin@gmail.com">chuhpsdustin@gmail.com</a></p>
+    <br><br>
+<div class="tool-container">
+    <h2>(1) 計算時間差</h2>
+    <div class="input-group">
+        <label for="datetime1">日期時間1(早)：</label>
+        <input type="text" id="datetime1" value="05/18 14:47:46" placeholder="MM/DD hh:mm:ss">
+    </div>
+    <div class="input-group">
+        <label for="datetime2">日期時間2(晚)：</label>
+        <input type="text" id="datetime2" value="05/24 06:09:44" placeholder="MM/DD hh:mm:ss">
+    </div>
+    <button onclick="calculateDifference()">計算時間差</button>
+    <p id="differenceResult" class="result"></p>
+</div>
+
+<div class="separator"></div>
+
+<div class="tool-container">
+    <h2>(2) 計算往前最後時間</h2>
+    <div class="input-group">
+        <label for="startDatetime">起始時間：</label>
+        <input type="text" id="startDatetime" value="05/24 06:09:44" placeholder="MM/DD hh:mm:ss">
+    </div>
+    <div class="input-group input-inline">
+        <label for="daysInput">減去 天數：</label>
+        <input type="number" id="daysInput" min="0" value="5">
+    </div>
+    <div class="input-group input-inline">
+        <label for="hoursInput">小時：</label>
+        <input type="number" id="hoursInput" min="0" value="15">
+    </div>
+    <div class="input-group input-inline">
+        <label for="minutesInput">分鐘：</label>
+        <input type="number" id="minutesInput" min="0" value="21">
+    </div>
+    <div class="input-group input-inline">
+        <label for="secondsInput">秒數：</label>
+        <input type="number" id="secondsInput" min="0" value="58">
+    </div>
+    <button onclick="calculateFinalTime()">計算最後時間</button>
+    <p id="finalTimeResult" class="result"></p>
+</div>
+
+<div class="separator"></div>
+
+<div class="tool-container">
+    <h2>(3) 計算往後最後時間</h2>
+    <div class="input-group">
+        <label for="startDatetimeForward">起始時間：</label>
+        <input type="text" id="startDatetimeForward" value="05/24 06:09:44" placeholder="MM/DD hh:mm:ss">
+    </div>
+    <div class="input-group input-inline">
+        <label for="daysInputForward">增加 天數：</label>
+        <input type="number" id="daysInputForward" min="0" value="1">
+    </div>
+    <div class="input-group input-inline">
+        <label for="hoursInputForward">小時：</label>
+        <input type="number" id="hoursInputForward" min="0" value="5">
+    </div>
+    <div class="input-group input-inline">
+        <label for="minutesInputForward">分鐘：</label>
+        <input type="number" id="minutesInputForward" min="0" value="6">
+    </div>
+    <div class="input-group input-inline">
+        <label for="secondsInputForward">秒數：</label>
+        <input type="number" id="secondsInputForward" min="0" value="15">
+    </div>
+    <button onclick="calculateFinalTimeForward()">計算最後時間</button>
+    <p id="finalTimeResultForward" class="result"></p>
+</div>
+
+<script>
+function calculateDifference() {
+    var datetime1 = new Date('2024/' + document.getElementById('datetime1').value);
+    var datetime2 = new Date('2024/' + document.getElementById('datetime2').value);
+
+    if (isNaN(datetime1) || isNaN(datetime2)) {
+        document.getElementById('differenceResult').innerText = "請輸入有效的日期時間格式";
+        return;
+    }
+
+    var difference = Math.abs(datetime2 - datetime1);
+    var daysDifference = Math.floor(difference / (1000 * 60 * 60 * 24));
+    difference -= daysDifference * (1000 * 60 * 60 * 24);
+
+    var hoursDifference = Math.floor(difference / (1000 * 60 * 60));
+    difference -= hoursDifference * (1000 * 60 * 60);
+
+    var minutesDifference = Math.floor(difference / (1000 * 60));
+    difference -= minutesDifference * (1000 * 60);
+
+    var secondsDifference = Math.floor(difference / 1000);
+
+    document.getElementById('differenceResult').innerText = "時間差：天數" + daysDifference + "、小時" + hoursDifference.toString().padStart(2, '0') + "、分鐘" + minutesDifference.toString().padStart(2, '0') + "和秒數" + secondsDifference.toString().padStart(2, '0');
+}
+
+function calculateFinalTime() {
+    var startDatetime = new Date('2024/' + document.getElementById('startDatetime').value);
+    var days = parseInt(document.getElementById('daysInput').value) || 0;
+    var hours = parseInt(document.getElementById('hoursInput').value) || 0;
+    var minutes = parseInt(document.getElementById('minutesInput').value) || 0;
+    var seconds = parseInt(document.getElementById('secondsInput').value) || 0;
+
+    if (isNaN(startDatetime)) {
+        document.getElementById('finalTimeResult').innerText = "請輸入有效的起始時間格式";
+        return;
+    }
+
+    var finalTime = new Date(startDatetime);
+    finalTime.setDate(finalTime.getDate() - days);
+    finalTime.setHours(finalTime.getHours() - hours);
+    finalTime.setMinutes(finalTime.getMinutes() - minutes);
+    finalTime.setSeconds(finalTime.getSeconds() - seconds);
+
+    var month = finalTime.getMonth() + 1;
+    var day = finalTime.getDate();
+    var hours = finalTime.getHours();
+    var minutes = finalTime.getMinutes();
+    var seconds = finalTime.getSeconds();
+
+    var formattedFinalTime = month + "/" + day + " " + hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
+
+    document.getElementById('finalTimeResult').innerText = "最後時間：" + formattedFinalTime;
+}
+
+function calculateFinalTimeForward() {
+    var startDatetime = new Date('2024/' + document.getElementById('startDatetimeForward').value);
+    var days = parseInt(document.getElementById('daysInputForward').value) || 0;
+    var hours = parseInt(document.getElementById('hoursInputForward').value) || 0;
+    var minutes = parseInt(document.getElementById('minutesInputForward').value) || 0;
+    var seconds = parseInt(document.getElementById('secondsInputForward').value) || 0;
+
+    if (isNaN(startDatetime)) {
+        document.getElementById('finalTimeResultForward').innerText = "請輸入有效的起始時間格式";
+        return;
+    }
+
+    var finalTime = new Date(startDatetime);
+    finalTime.setDate(finalTime.getDate() + days);
+    finalTime.setHours(finalTime.getHours() + hours);
+    finalTime.setMinutes(finalTime.getMinutes() + minutes);
+    finalTime.setSeconds(finalTime.getSeconds() + seconds);
+
+    var month = finalTime.getMonth() + 1;
+    var day = finalTime.getDate();
+    var hours = finalTime.getHours();
+    var minutes = finalTime.getMinutes();
+    var seconds = finalTime.getSeconds();
+
+    var formattedFinalTime = month + "/" + day + " " + hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
+
+    document.getElementById('finalTimeResultForward').innerText = "最後時間：" + formattedFinalTime;
+}
+</script>
+
+</body>
+</html>
